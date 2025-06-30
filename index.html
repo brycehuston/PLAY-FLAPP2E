@@ -1,125 +1,128 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | FLAP</title>
-    <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
-    <script type="module" crossorigin src="./assets/index-f9496d0e.js"></script>
-  </head>
-  <body>
-    <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas" width="900" height="600"></canvas>
-      <div id="unity-loading-bar">
-        <div id="unity-logo"></div>
-        <div id="unity-progress-bar-empty">
-          <div id="unity-progress-bar-full"></div>
-        </div>
-      </div>
-      <div id="unity-warning"></div>
-      <div id="unity-footer">
-        <div id="unity-webgl-logo"></div>
-        <div id="unity-fullscreen-button"></div>
-        <div id="unity-build-title">FLAP</div>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Unity WebGL Player | FLAP</title>
+  <link rel="shortcut icon" href="TemplateData/favicon.ico">
+  <link rel="stylesheet" href="TemplateData/style.css">
+  <script type="module" crossorigin src="./assets/index-f9496d0e.js"></script>
+</head>
+
+<body>
+  <div id="unity-container" class="unity-desktop">
+    <canvas id="unity-canvas" width="900" height="600"></canvas>
+    <div id="unity-loading-bar">
+      <div id="unity-logo"></div>
+      <div id="unity-progress-bar-empty">
+        <div id="unity-progress-bar-full"></div>
       </div>
     </div>
+    <div id="unity-warning"></div>
+    <div id="unity-footer">
+      <div id="unity-webgl-logo"></div>
+      <div id="unity-fullscreen-button"></div>
+      <div id="unity-build-title">FLAP</div>
+    </div>
+  </div>
 
-    <script>
-      document.body.appendChild(Object.assign(document.createElement("script"), {
-        type: "text/javascript",
-        src: "./network.js"
-      }));
-    </script>
+  <script>
+    document.body.appendChild(Object.assign(document.createElement("script"), {
+      type: "text/javascript",
+      src: "./network.js"
+    }));
+  </script>
 
-    <script>
-      var container = document.querySelector("#unity-container");
-      var canvas = document.querySelector("#unity-canvas");
-      var loadingBar = document.querySelector("#unity-loading-bar");
-      var progressBarFull = document.querySelector("#unity-progress-bar-full");
-      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
-      var warningBanner = document.querySelector("#unity-warning");
+  <script>
+    var container = document.querySelector("#unity-container");
+    var canvas = document.querySelector("#unity-canvas");
+    var loadingBar = document.querySelector("#unity-loading-bar");
+    var progressBarFull = document.querySelector("#unity-progress-bar-full");
+    var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+    var warningBanner = document.querySelector("#unity-warning");
 
-      function unityShowBanner(msg, type) {
-        function updateBannerVisibility() {
-          warningBanner.style.display = warningBanner.children.length ? "block" : "none";
-        }
-        var div = document.createElement("div");
-        div.innerHTML = msg;
-        warningBanner.appendChild(div);
-        if (type === "error") div.style = "background: red; padding: 10px;";
-        else {
-          if (type === "warning") div.style = "background: yellow; padding: 10px;";
-          setTimeout(function () {
-            warningBanner.removeChild(div);
-            updateBannerVisibility();
-          }, 5000);
-        }
-        updateBannerVisibility();
+    function unityShowBanner(msg, type) {
+      function updateBannerVisibility() {
+        warningBanner.style.display = warningBanner.children.length ? "block" : "none";
       }
-
-      var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/Flapp2e-2.loader.js";
-      var config = {
-        dataUrl: buildUrl + "/Flapp2e-2.data",
-        frameworkUrl: buildUrl + "/Flapp2e-2.framework.js",
-        codeUrl: buildUrl + "/Flapp2e-2.wasm",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "DefaultCompany",
-        productName: "FLAP",
-        productVersion: "1.0",
-        showBanner: unityShowBanner,
-      };
-
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        container.className = "unity-mobile";
-        config.devicePixelRatio = 1;
-        unityShowBanner("Flap to Win. Score to Earn. Only the Strong Survive.");
-      } else {
-        canvas.style.width = "900px";
-        canvas.style.height = "600px";
+      var div = document.createElement("div");
+      div.innerHTML = msg;
+      warningBanner.appendChild(div);
+      if (type === "error") div.style = "background: red; padding: 10px;";
+      else {
+        if (type === "warning") div.style = "background: yellow; padding: 10px;";
+        setTimeout(function () {
+          warningBanner.removeChild(div);
+          updateBannerVisibility();
+        }, 5000);
       }
+      updateBannerVisibility();
+    }
 
-      loadingBar.style.display = "block";
+    var buildUrl = "Build";
+    var loaderUrl = buildUrl + "/Flapp2e-2.loader.js";
+    var config = {
+      dataUrl: buildUrl + "/Flapp2e-2.data",
+      frameworkUrl: buildUrl + "/Flapp2e-2.framework.js",
+      codeUrl: buildUrl + "/Flapp2e-2.wasm",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "DefaultCompany",
+      productName: "FLAP",
+      productVersion: "1.0",
+      showBanner: unityShowBanner,
+    };
 
-      var script = document.createElement("script");
-      script.src = loaderUrl;
-      script.onload = () => {
-        createUnityInstance(canvas, config, (progress) => {
-          progressBarFull.style.width = 100 * progress + "%";
-        }).then((unityInstance) => {
-          loadingBar.style.display = "none";
-          fullscreenButton.onclick = () => {
-            unityInstance.SetFullscreen(1);
-          };
+    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+      container.className = "unity-mobile";
+      config.devicePixelRatio = 1;
+      unityShowBanner("Flap to Win. Score to Earn. Only the Strong Survive.");
+    } else {
+      canvas.style.width = "900px";
+      canvas.style.height = "600px";
+    }
 
-          // Clipboard Paste Trigger
-          window.RequestClipboardPaste = function (objName, methodName) {
-            if (navigator.clipboard && navigator.clipboard.readText) {
-              navigator.clipboard.readText().then(function (text) {
-                unityInstance.SendMessage(objName, methodName, text);
-              }).catch(function (err) {
-                alert("Clipboard not allowed: " + err.message);
-              });
-            } else {
-              alert("Clipboard API not supported on this browser.");
-            }
-          };
+    loadingBar.style.display = "block";
 
-          // Ctrl+V Desktop Shortcut
-          if (!/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-            window.addEventListener("keydown", function (e) {
-              if (e.ctrlKey && e.key === "v") {
-                window.RequestClipboardPaste("ClipboardHandler", "ReceiveClipboardData");
-              }
+    var script = document.createElement("script");
+    script.src = loaderUrl;
+    script.onload = () => {
+      createUnityInstance(canvas, config, (progress) => {
+        progressBarFull.style.width = 100 * progress + "%";
+      }).then((unityInstance) => {
+        loadingBar.style.display = "none";
+        fullscreenButton.onclick = () => {
+          unityInstance.SetFullscreen(1);
+        };
+
+        // Clipboard Paste Trigger
+        window.RequestClipboardPaste = function (objName, methodName) {
+          if (navigator.clipboard && navigator.clipboard.readText) {
+            navigator.clipboard.readText().then(function (text) {
+              unityInstance.SendMessage(objName, methodName, text);
+            }).catch(function (err) {
+              alert("Clipboard not allowed: " + err.message);
             });
+          } else {
+            alert("Clipboard API not supported on this browser.");
           }
+        };
 
-        }).catch((message) => {
-          alert(message);
-        });
-      };
-      document.body.appendChild(script);
-    </script>
-  </body>
+        // Ctrl+V Desktop Shortcut
+        if (!/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+          window.addEventListener("keydown", function (e) {
+            if (e.ctrlKey && e.key === "v") {
+              window.RequestClipboardPaste("ClipboardHandler", "ReceiveClipboardData");
+            }
+          });
+        }
+
+      }).catch((message) => {
+        alert(message);
+      });
+    };
+    document.body.appendChild(script);
+  </script>
+</body>
+
 </html>
